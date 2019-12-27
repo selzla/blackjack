@@ -96,6 +96,7 @@ app.layout = html.Div([
     html.Div([
         html.Button(id='submit-button', n_clicks=0, children='Submit'),
     ], style={'top':'42%','position':'absolute'}),
+    dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
     html.Div([
         dcc.Graph(id='indicator-graphic'),
         dcc.Graph(id='overall-hist')
@@ -160,7 +161,8 @@ app.layout = html.Div([
 ])
 
 @app.callback(
-    [Output('indicator-graphic', 'figure'),
+    [Output("loading-output-1", "children"),
+    Output('indicator-graphic', 'figure'),
     Output('overall-hist', 'figure'),
     Output('mean_fv', 'children'),
     Output('std_fv', 'children'),
@@ -304,7 +306,7 @@ def update_fig(n_clicks, n_decks, count_system, plays_per_session, number_of_ses
     fig2.update_layout(title='Distribution Over All Sessions of Final Money Values',
                    xaxis_title='Final Money Value',
                    yaxis_title='Counts')
-    return fig, fig2, round(mean_fv,5), round(std_fv,5), round(std_mean_fv,5), round(mean_wpr,5), round(std_wpr,5), round(std_mean_wpr,5), round(mean_wpr1,5), round(std_wpr1,5), round(std_mean_wpr1,5), round(mean_wpr2,5), round(std_wpr2,5), round(std_mean_wpr2,5), round(mean_wpr3,5), round(std_wpr3,5), round(std_mean_wpr3,5), round(mean_wpr4,5), round(std_wpr4,5), round(std_mean_wpr4,5), round(mean_wpr5,5), round(std_wpr5,5), round(std_mean_wpr5,5)
+    return None, fig, fig2, round(mean_fv,5), round(std_fv,5), round(std_mean_fv,5), round(mean_wpr,5), round(std_wpr,5), round(std_mean_wpr,5), round(mean_wpr1,5), round(std_wpr1,5), round(std_mean_wpr1,5), round(mean_wpr2,5), round(std_wpr2,5), round(std_mean_wpr2,5), round(mean_wpr3,5), round(std_wpr3,5), round(std_mean_wpr3,5), round(mean_wpr4,5), round(std_wpr4,5), round(std_mean_wpr4,5), round(mean_wpr5,5), round(std_wpr5,5), round(std_mean_wpr5,5)
 
 server = app.server
 
