@@ -62,22 +62,30 @@ class Blackjack:
         return tot + 11 * n_elevens + n_ones
 
     def action(self, hand, dealercard):
-        if self.total(hand) > 21:
+        t = self.total(hand)
+        if t > 21:
             return 'S'
         if 'A' in hand:
-            tot = self.total(hand)
-            if tot == 12:
-                handstr = 'A.A'
+            hardtotal = 0
+            for x in hand:
+                if x == 'A':
+                    hardtotal += 1
+                else:
+                    hardtotal += x
+            if hardtotal < t:
+                if t == 12:
+                    handstr = 'A.A'
+                else:
+                    handstr = 'A.{}'.format(str(t - 11))
+                # print('handstr', handstr)
+                return self.rules_df[str(dealercard)].iloc[self.handindex[handstr]]
             else:
-                handstr = 'A.{}'.format(str(tot - 11))
-            # print('handstr', handstr)
-            return self.rules_df[str(dealercard)].iloc[self.handindex[handstr]]
+                return self.rules_df[str(dealercard)].iloc[self.handindex[str(t)]]
         elif len(hand) == 2 and hand[0] == hand[1]:
             splithand = '{}.{}'.format(str(hand[0]), str(hand[0]))
             return self.rules_df[str(dealercard)].iloc[self.handindex[splithand]]
         else:
-            tot = self.total(hand)
-            return self.rules_df[str(dealercard)].iloc[self.handindex[str(tot)]]
+            return self.rules_df[str(dealercard)].iloc[self.handindex[str(t)]]
 
     def play_hand(self, bet):
         action = self.action(self.player_hand, self.dealer_hand[0])
